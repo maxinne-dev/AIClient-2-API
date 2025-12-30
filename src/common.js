@@ -210,7 +210,7 @@ export async function handleStreamRequest(res, service, model, requestBody, from
                 continue;
             }
 
-            // 处理 chunkToSend 可能是数组或对象的情况
+            // Handle case where chunkToSend can be an array or object
             const chunksToSend = Array.isArray(chunkToSend) ? chunkToSend : [chunkToSend];
 
             for (const chunk of chunksToSend) {
@@ -232,7 +232,7 @@ export async function handleStreamRequest(res, service, model, requestBody, from
             // console.log(`data: ${JSON.stringify(getOpenAIStreamChunkStop(model))}\n`);
         }
 
-        // 流式请求成功完成，统计使用次数，错误次数重置为0
+        // Stream request completed successfully, count usage, reset error count to 0
         if (providerPoolManager && pooluuid) {
             console.log(`[Provider Pool] Increasing usage count for ${toProvider} (${pooluuid}) after successful stream request`);
             providerPoolManager.markProviderHealthy(toProvider, {
@@ -244,13 +244,13 @@ export async function handleStreamRequest(res, service, model, requestBody, from
         console.error('\n[Server] Error during stream processing:', error.stack);
         if (providerPoolManager && pooluuid) {
             console.log(`[Provider Pool] Marking ${toProvider} as unhealthy due to stream error`);
-            // 如果是号池模式，并且请求处理失败，则标记当前使用的提供者为不健康
+            // If in pool mode and request processing failed, mark current provider as unhealthy
             providerPoolManager.markProviderUnhealthy(toProvider, {
                 uuid: pooluuid
             });
         }
 
-        // 使用新方法创建符合 fromProvider 格式的流式错误响应
+        // Use new method to create streaming error response conforming to fromProvider format
         const errorPayload = createStreamErrorResponse(error, fromProvider);
         res.write(errorPayload);
         res.end();
@@ -287,7 +287,7 @@ export async function handleUnaryRequest(res, service, model, requestBody, fromP
         await logConversation('output', responseText, PROMPT_LOG_MODE, PROMPT_LOG_FILENAME);
         // fs.writeFile('oldResponse'+Date.now()+'.json', JSON.stringify(clientResponse));
         
-        // 一元请求成功完成，统计使用次数，错误次数重置为0
+        // Unary request completed successfully, count usage, reset error count to 0
         if (providerPoolManager && pooluuid) {
             console.log(`[Provider Pool] Increasing usage count for ${toProvider} (${pooluuid}) after successful unary request`);
             providerPoolManager.markProviderHealthy(toProvider, {
@@ -298,13 +298,13 @@ export async function handleUnaryRequest(res, service, model, requestBody, fromP
         console.error('\n[Server] Error during unary processing:', error.stack);
         if (providerPoolManager && pooluuid) {
             console.log(`[Provider Pool] Marking ${toProvider} as unhealthy due to stream error`);
-            // 如果是号池模式，并且请求处理失败，则标记当前使用的提供者为不健康
+            // If in pool mode and request processing failed, mark current provider as unhealthy
             providerPoolManager.markProviderUnhealthy(toProvider, {
                 uuid: pooluuid
             });
         }
 
-        // 使用新方法创建符合 fromProvider 格式的错误响应
+        // Use new method to create error response conforming to fromProvider format
         const errorResponse = createErrorResponse(error, fromProvider);
         await handleUnifiedResponse(res, JSON.stringify(errorResponse), false);
     }
@@ -352,7 +352,7 @@ export async function handleModelListRequest(req, res, service, endpointType, CO
     } catch (error) {
         console.error('\n[Server] Error during model list processing:', error.stack);
         if (providerPoolManager) {
-            // 如果是号池模式，并且请求处理失败，则标记当前使用的提供者为不健康
+            // If in pool mode and request processing failed, mark current provider as unhealthy
             providerPoolManager.markProviderUnhealthy(toProvider, {
                 uuid: pooluuid
             });
@@ -384,7 +384,7 @@ export async function handleContentGenerationRequest(req, res, service, endpoint
     };
 
     const fromProvider = clientProviderMap[endpointType];
-    // 使用实际的提供商类型（可能是 fallback 后的类型）
+    // Use actual provider type (may be the type after fallback)
     let toProvider = CONFIG.actualProviderType || CONFIG.MODEL_PROVIDER;
     let actualUuid = pooluuid;
     
@@ -400,8 +400,8 @@ export async function handleContentGenerationRequest(req, res, service, endpoint
     }
     console.log(`[Content Generation] Model: ${model}, Stream: ${isStream}`);
 
-    // 2.5. 如果使用了提供商池，根据模型重新选择提供商（支持 Fallback）
-    // 注意：这里使用 skipUsageCount: true，因为初次选择时已经增加了 usageCount
+    // 2.5. If using provider pool, reselect provider based on model (supports Fallback)
+    // Note: Using skipUsageCount: true here because usageCount was already increased during initial selection
     if (providerPoolManager && CONFIG.providerPools && CONFIG.providerPools[CONFIG.MODEL_PROVIDER]) {
         const { getApiServiceWithFallback } = await import('./service-manager.js');
         const result = await getApiServiceWithFallback(CONFIG, model);
@@ -553,10 +553,10 @@ export function handleError(res, error) {
 }
 
 /**
- * 从请求体中提取系统提示词。
- * @param {Object} requestBody - 请求体对象。
- * @param {string} provider - 提供商类型（'openai', 'gemini', 'claude'）。
- * @returns {string} 提取到的系统提示词字符串。
+ * Extract system prompt from request body.
+ * @param {Object} requestBody - Request body object.
+ * @param {string} provider - Provider type ('openai', 'gemini', 'claude').
+ * @returns {string} Extracted system prompt string.
  */
 export function extractSystemPromptFromRequestBody(requestBody, provider) {
     let incomingSystemText = '';
@@ -627,17 +627,17 @@ export function getMD5Hash(obj) {
 
 
 /**
- * 创建符合 fromProvider 格式的错误响应（非流式）
- * @param {Error} error - 错误对象
- * @param {string} fromProvider - 客户端期望的提供商格式
- * @returns {Object} 格式化的错误响应对象
+ * Create error response conforming to fromProvider format (non-streaming)
+ * @param {Error} error - Error object
+ * @param {string} fromProvider - Provider format expected by client
+ * @returns {Object} Formatted error response object
  */
 function createErrorResponse(error, fromProvider) {
     const protocolPrefix = getProtocolPrefix(fromProvider);
     const statusCode = error.status || error.code || 500;
     const errorMessage = error.message || "An error occurred during processing.";
     
-    // 根据 HTTP 状态码映射错误类型
+    // Map error type based on HTTP status code
     const getErrorType = (code) => {
         if (code === 401) return 'authentication_error';
         if (code === 403) return 'permission_error';
@@ -646,7 +646,7 @@ function createErrorResponse(error, fromProvider) {
         return 'invalid_request_error';
     };
     
-    // 根据 HTTP 状态码映射 Gemini 的 status
+    // Map Gemini status based on HTTP status code
     const getGeminiStatus = (code) => {
         if (code === 400) return 'INVALID_ARGUMENT';
         if (code === 401) return 'UNAUTHENTICATED';
@@ -659,17 +659,17 @@ function createErrorResponse(error, fromProvider) {
     
     switch (protocolPrefix) {
         case MODEL_PROTOCOL_PREFIX.OPENAI:
-            // OpenAI 非流式错误格式
+            // OpenAI non-streaming error format
             return {
                 error: {
                     message: errorMessage,
                     type: getErrorType(statusCode),
-                    code: getErrorType(statusCode)  // OpenAI 使用 code 字段作为核心判断
+                    code: getErrorType(statusCode)  // OpenAI uses code field as core determination
                 }
             };
             
         case MODEL_PROTOCOL_PREFIX.OPENAI_RESPONSES:
-            // OpenAI Responses API 非流式错误格式
+            // OpenAI Responses API non-streaming error format
             return {
                 error: {
                     type: getErrorType(statusCode),
@@ -679,27 +679,27 @@ function createErrorResponse(error, fromProvider) {
             };
             
         case MODEL_PROTOCOL_PREFIX.CLAUDE:
-            // Claude 非流式错误格式（外层有 type 标记）
+            // Claude non-streaming error format (outer layer has type marker)
             return {
-                type: "error",  // 核心区分标记
+                type: "error",  // Core distinguishing marker
                 error: {
-                    type: getErrorType(statusCode),  // Claude 使用 error.type 作为核心判断
+                    type: getErrorType(statusCode),  // Claude uses error.type as core determination
                     message: errorMessage
                 }
             };
             
         case MODEL_PROTOCOL_PREFIX.GEMINI:
-            // Gemini 非流式错误格式（遵循 Google Cloud 标准）
+            // Gemini non-streaming error format (follows Google Cloud standard)
             return {
                 error: {
                     code: statusCode,
                     message: errorMessage,
-                    status: getGeminiStatus(statusCode)  // Gemini 使用 status 作为核心判断
+                    status: getGeminiStatus(statusCode)  // Gemini uses status as core determination
                 }
             };
             
         default:
-            // 默认使用 OpenAI 格式
+            // Default to OpenAI format
             return {
                 error: {
                     message: errorMessage,
@@ -711,17 +711,17 @@ function createErrorResponse(error, fromProvider) {
 }
 
 /**
- * 创建符合 fromProvider 格式的流式错误响应
- * @param {Error} error - 错误对象
- * @param {string} fromProvider - 客户端期望的提供商格式
- * @returns {string} 格式化的流式错误响应字符串
+ * Create streaming error response conforming to fromProvider format
+ * @param {Error} error - Error object
+ * @param {string} fromProvider - Provider format expected by client
+ * @returns {string} Formatted streaming error response string
  */
 function createStreamErrorResponse(error, fromProvider) {
     const protocolPrefix = getProtocolPrefix(fromProvider);
     const statusCode = error.status || error.code || 500;
     const errorMessage = error.message || "An error occurred during streaming.";
     
-    // 根据 HTTP 状态码映射错误类型
+    // Map error type based on HTTP status code
     const getErrorType = (code) => {
         if (code === 401) return 'authentication_error';
         if (code === 403) return 'permission_error';
@@ -730,7 +730,7 @@ function createStreamErrorResponse(error, fromProvider) {
         return 'invalid_request_error';
     };
     
-    // 根据 HTTP 状态码映射 Gemini 的 status
+    // Map Gemini status based on HTTP status code
     const getGeminiStatus = (code) => {
         if (code === 400) return 'INVALID_ARGUMENT';
         if (code === 401) return 'UNAUTHENTICATED';
@@ -743,7 +743,7 @@ function createStreamErrorResponse(error, fromProvider) {
     
     switch (protocolPrefix) {
         case MODEL_PROTOCOL_PREFIX.OPENAI:
-            // OpenAI 流式错误格式（SSE data 块）
+            // OpenAI streaming error format (SSE data block)
             const openaiError = {
                 error: {
                     message: errorMessage,
@@ -754,7 +754,7 @@ function createStreamErrorResponse(error, fromProvider) {
             return `data: ${JSON.stringify(openaiError)}\n\n`;
             
         case MODEL_PROTOCOL_PREFIX.OPENAI_RESPONSES:
-            // OpenAI Responses API 流式错误格式（SSE event + data）
+            // OpenAI Responses API streaming error format (SSE event + data)
             const responsesError = {
                 id: `resp_${Date.now()}`,
                 object: "error",
@@ -768,7 +768,7 @@ function createStreamErrorResponse(error, fromProvider) {
             return `event: error\ndata: ${JSON.stringify(responsesError)}\n\n`;
             
         case MODEL_PROTOCOL_PREFIX.CLAUDE:
-            // Claude 流式错误格式（SSE event + data）
+            // Claude streaming error format (SSE event + data)
             const claudeError = {
                 type: "error",
                 error: {
@@ -779,9 +779,9 @@ function createStreamErrorResponse(error, fromProvider) {
             return `event: error\ndata: ${JSON.stringify(claudeError)}\n\n`;
             
         case MODEL_PROTOCOL_PREFIX.GEMINI:
-            // Gemini 流式错误格式
-            // 注意：虽然 Gemini 原生使用 JSON 数组，但在我们的实现中已经转换为 SSE 格式
-            // 所以这里也需要使用 data: 前缀，保持与正常流式响应一致
+            // Gemini streaming error format
+            // Note: Although Gemini natively uses JSON array, in our implementation it has been converted to SSE format
+            // So here we also need to use data: prefix to keep consistent with normal streaming response
             const geminiError = {
                 error: {
                     code: statusCode,
@@ -792,7 +792,7 @@ function createStreamErrorResponse(error, fromProvider) {
             return `data: ${JSON.stringify(geminiError)}\n\n`;
             
         default:
-            // 默认使用 OpenAI SSE 格式
+            // Default to OpenAI SSE format
             const defaultError = {
                 error: {
                     message: errorMessage,

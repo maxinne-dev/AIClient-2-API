@@ -10,7 +10,7 @@ import { API_ACTIONS, formatExpiryTime } from '../common.js';
 import { getProviderModels } from '../provider-models.js';
 import { handleGeminiCliOAuth } from '../oauth-handlers.js';
 
-// 配置 HTTP/HTTPS agent 限制连接池大小，避免资源泄漏
+// Configure HTTP/HTTPS agent to limit connection pool size and avoid resource leaks
 const httpAgent = new http.Agent({
     keepAlive: true,
     maxSockets: 100,
@@ -39,15 +39,15 @@ function is_anti_truncation_model(model) {
     return ANTI_TRUNCATION_MODELS.some(antiModel => model.includes(antiModel));
 }
 
-// 从防截断模型名中提取实际模型名
+// Extract actual model name from anti-truncation model name
 function extract_model_from_anti_model(model) {
     if (model.startsWith('anti-')) {
-        const originalModel = model.substring(5); // 移除 'anti-' 前缀
+        const originalModel = model.substring(5); // Remove 'anti-' prefix
         if (GEMINI_MODELS.includes(originalModel)) {
             return originalModel;
         }
     }
-    return model; // 如果不是anti-前缀或不在原模型列表中，则返回原模型名
+    return model; // If not anti-prefix or not in original model list, return original model name
 }
 
 function toGeminiApiResponse(codeAssistResponse) {
@@ -86,14 +86,14 @@ function ensureRolesInContents(requestBody) {
             }
         });
 
-        // 如果存在 systemInstruction，将其放在 contents 索引 0 的位置
+        // If systemInstruction exists, place it at index 0 of contents
         // if (requestBody.systemInstruction) {
-        //     // 检查 contents[0] 是否与 systemInstruction 内容相同
+        //     // Check if contents[0] has the same content as systemInstruction
         //     const firstContent = requestBody.contents[0];
         //     let isSame = false;
 
         //     if (firstContent && firstContent.parts && requestBody.systemInstruction.parts) {
-        //         // 比较 parts 数组的内容
+        //         // Compare the content of parts arrays
         //         const firstContentText = firstContent.parts
         //             .filter(p => p?.text)
         //             .map(p => p.text)
@@ -106,7 +106,7 @@ function ensureRolesInContents(requestBody) {
         //         isSame = firstContentText === systemInstructionText;
         //     }
 
-        //     // 如果内容不同，则将 systemInstruction 插入到索引 0 的位置
+        //     // If content is different, insert systemInstruction at index 0
         //     if (!isSame) {
         //         requestBody.contents.unshift({
         //             role: requestBody.systemInstruction.role || 'user',
@@ -124,7 +124,7 @@ async function* apply_anti_truncation_to_stream(service, model, requestBody) {
     let allGeneratedText = '';
 
     while (true) {
-        // 发送请求并处理流式响应
+        // Send request and handle streaming response
         const apiRequest = {
             model: model,
             project: service.projectId,
@@ -144,13 +144,13 @@ async function* apply_anti_truncation_to_stream(service, model, requestBody) {
             }
         }
 
-        // 检查是否因为达到token限制而截断
+        // Check if truncated due to token limit
         if (lastChunk &&
             lastChunk.candidates &&
             lastChunk.candidates[0] &&
             lastChunk.candidates[0].finishReason === 'MAX_TOKENS') {
 
-            // 提取已生成的文本内容
+            // Extract generated text content
             if (lastChunk.candidates[0].content && lastChunk.candidates[0].content.parts) {
                 const generatedParts = lastChunk.candidates[0].content.parts
                     .filter(part => part.text)
@@ -160,16 +160,16 @@ async function* apply_anti_truncation_to_stream(service, model, requestBody) {
                     const currentGeneratedText = generatedParts.join('');
                     allGeneratedText += currentGeneratedText;
 
-                    // 构建新的请求，包含之前的对话历史和继续指令
+                    // Build new request with previous conversation history and continue instruction
                     const newContents = [...requestBody.contents];
 
-                    // 添加之前生成的内容作为模型响应
+                    // Add previously generated content as model response
                     newContents.push({
                         role: 'model',
                         parts: [{ text: currentGeneratedText }]
                     });
 
-                    // 添加继续生成的指令
+                    // Add continue instruction
                     newContents.push({
                         role: 'user',
                         parts: [{ text: 'Please continue from where you left off.' }]
@@ -180,20 +180,20 @@ async function* apply_anti_truncation_to_stream(service, model, requestBody) {
                         contents: newContents
                     };
 
-                    // 继续下一轮请求
+                    // Continue to next request
                     continue;
                 }
             }
         }
 
-        // 如果没有截断或无法继续，则退出循环
+        // If not truncated or cannot continue, exit loop
         break;
     }
 }
 
 export class GeminiApiService {
     constructor(config) {
-        // 配置 OAuth2Client 使用自定义的 HTTP agent
+        // Configure OAuth2Client to use custom HTTP agent
         this.authClient = new OAuth2Client({
             clientId: OAUTH_CLIENT_ID,
             clientSecret: OAUTH_CLIENT_SECRET,
@@ -278,15 +278,15 @@ export class GeminiApiService {
     }
 
     async getNewToken(credPath) {
-        // 使用统一的 OAuth 处理方法
+        // Use unified OAuth handling method
         const { authUrl, authInfo } = await handleGeminiCliOAuth(this.config);
         
-        console.log('\n[Gemini Auth] 正在自动打开浏览器进行授权...');
-        console.log('[Gemini Auth] 授权链接:', authUrl, '\n');
+        console.log('\n[Gemini Auth] Opening browser automatically for authorization...');
+        console.log('[Gemini Auth] Authorization link:', authUrl, '\n');
 
-        // 自动打开浏览器
+        // Open browser automatically
         const showFallbackMessage = () => {
-            console.log('[Gemini Auth] 无法自动打开浏览器，请手动复制上面的链接到浏览器中打开');
+            console.log('[Gemini Auth] Unable to open browser automatically, please manually copy the above link and open it in a browser');
         };
 
         if (this.config) {

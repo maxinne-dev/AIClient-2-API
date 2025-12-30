@@ -65,9 +65,9 @@ export async function handleAPIRequests(method, path, req, res, currentConfig, a
 export function initializeAPIManagement(services) {
     return async function heartbeatAndRefreshToken() {
         console.log(`[Heartbeat] Server is running. Current time: ${new Date().toLocaleString()}`, Object.keys(services));
-        // 循环遍历所有已初始化的服务适配器，并尝试刷新令牌
+        // Loop through all initialized service adapters and try to refresh tokens
         // if (getProviderPoolManager()) {
-        //     await getProviderPoolManager().performHealthChecks(); // 定期执行健康检查
+        //     await getProviderPoolManager().performHealthChecks(); // Perform health checks periodically
         // }
         for (const providerKey in services) {
             const serviceAdapter = services[providerKey];
@@ -78,10 +78,10 @@ export function initializeAPIManagement(services) {
                 // console.log(`[Token Refresh] Refreshed token for ${providerKey}`);
             } catch (error) {
                 console.error(`[Token Refresh Error] Failed to refresh token for ${providerKey}: ${error.message}`);
-                // 如果是号池中的某个实例刷新失败，这里需要捕获并更新其状态
-                // 现有的 serviceInstances 存储的是每个配置对应的单例，而非池中的成员
-                // 这意味着如果一个池成员的 token 刷新失败，需要找到它并更新其在 poolManager 中的状态
-                // 暂时通过捕获错误日志来发现问题，更精细的控制需要在 refreshToken 中抛出更多信息
+                // If an instance in the pool fails to refresh, we need to capture and update its status here
+                // The existing serviceInstances stores the singleton for each configuration, not the members in the pool
+                // This means if a pool member's token refresh fails, we need to find it and update its status in poolManager
+                // For now, we discover issues by capturing error logs; finer control requires refreshToken to throw more information
             }
         }
     };

@@ -1,4 +1,4 @@
-/* CSS变量 */
+/* CSS Variables */
 :root {
     --primary-color: #059669;
     --secondary-color: #10b981;
@@ -17,7 +17,7 @@
     --transition: all 0.3s ease;
 }
 
-/* 基础样式 */
+/* Base styles */
 * {
     margin: 0;
     padding: 0;
@@ -31,7 +31,7 @@ body {
     line-height: 1.6;
 }
 
-/* 容器 */
+/* Container */
 .container {
     display: flex;
     flex-direction: column;
@@ -120,7 +120,7 @@ body {
     font-size: 14px;
 }
 
-/* 高亮说明样式 */
+/* Highlighted description styles */
 .highlight-note {
     display: inline-flex;
     align-items: center;
@@ -156,7 +156,7 @@ body {
     }
 }
 
-/* 主要内容区域 */
+/* Main content area */
 .main-content {
     display: flex;
     flex: 1;
@@ -165,7 +165,7 @@ body {
     margin: 0 auto;
 }
 
-/* 侧边栏 */
+/* Sidebar */
 .sidebar {
     width: 240px;
     background: var(--bg-primary);
@@ -210,7 +210,7 @@ body {
     text-align: center;
 }
 
-/* 内容区域 */
+/* Content area */
 .content {
     flex: 1;
     padding: 2rem;
@@ -232,7 +232,7 @@ body {
     color: var(--text-primary);
 }
 
-/* 统计卡片 */
+/* Statistics cards */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -279,7 +279,7 @@ body {
     font-size: 0.875rem;
 }
 
-/* 表单样式 */
+/* Form styles */
 .config-panel {
     background: var(--bg-primary);
     padding: 2rem;
@@ -338,7 +338,7 @@ textarea.form-control {
     font-family: inherit;
 }
 
-/* 密码输入框样式 */
+/* Password input box styles */
 .password-input-group {
     position: relative;
 }
@@ -383,7 +383,7 @@ textarea.form-control {
     text-align: center;
 }
 
-/* 模态框中的密码输入框样式 */
+/* Password input box styles in modal */
 .config-item .password-input-wrapper {
     position: relative;
     width: 100%;
@@ -413,7 +413,7 @@ textarea.form-control {
     color: var(--primary-color);
 }
 
-/* 文件上传输入框样式 */
+/* File upload input box styles */
 .file-input-group {
     position: relative;
     display: flex;
@@ -446,9 +446,9 @@ textarea.form-control {
     border-color: var(--primary-color);
 }
 
-/* 兼容旧的 class 名 */
+/* Compatible with old class names */
 .upload-btn {
-    /* 移除之前的 position: absolute 等样式，改为 inline-flex 配合父级 flex 布局 */
+    /* Remove previous position: absolute styles, change to inline-flex with parent flex layout */
     display: inline-flex;
 }
 
@@ -462,7 +462,7 @@ textarea.form-control {
     font-size: 0.875rem;
 }
 
-/* 单选按钮组 */
+/* Radio button group */
 .radio-group {
     display: flex;
     gap: 1.5rem;
@@ -483,7 +483,7 @@ textarea.form-control {
     cursor: pointer;
 }
 
-/* 提供商配置组 */
+/* Provider configuration group */
 .provider-config {
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
@@ -492,7 +492,7 @@ textarea.form-control {
     background: var(--bg-secondary);
 }
 
-/* 高级配置区域 */
+/* Advanced configuration area */
 .advanced-config-section {
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
@@ -528,7 +528,7 @@ textarea.form-control {
     margin-bottom: 0;
 }
 
-/* 复选框样式 */
+/* Checkbox styles */
 .form-group input[type="checkbox"] {
     width: 1rem;
     height: 1rem;
@@ -536,7 +536,7 @@ textarea.form-control {
     cursor: pointer;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .config-row {
         grid-template-columns: 1fr;
@@ -551,7 +551,7 @@ textarea.form-control {
     justify-content: flex-end;
 }
 
-/* 按钮 */
+/* Buttons */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -627,7 +627,7 @@ textarea.form-control {
     background: #ef4444;
 }
 
-/* 提供商列表 */
+/* Provider list */
 .providers-container {
     background: var(--bg-primary);
     padding: 1.5rem;
@@ -784,7 +784,7 @@ textarea.form-control {
     padding: 1.5rem;
 }
 
-/* 协议标签样式 */
+/* Protocol label styles */
 .protocol-tabs {
     display: flex;
     margin-bottom: 1rem;
@@ -815,7 +815,7 @@ textarea.form-control {
     background: var(--bg-secondary);
 }
 
-/* 协议内容区域 */
+/* Protocol content area */
 .protocol-content {
     display: none;
     animation: fadeIn 0.3s ease;
@@ -1028,7 +1028,7 @@ textarea.form-control {
     color: var(--text-primary);
 }
 
-/* 日志 */
+/* Logs */
 .logs-controls {
     display: flex;
     gap: 1rem;
@@ -1068,7 +1068,7 @@ textarea.form-control {
     color: #dcdcaa;
 }
 
-/* 系统信息 */
+/* System information */
 .system-info {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1112,7 +1112,7 @@ textarea.form-control {
     font-size: 0.875rem;
 }
 
-/* 通知 */
+/* Notifications */
 .toast-container {
     position: fixed;
     top: 1rem;
@@ -1154,7 +1154,7 @@ textarea.form-control {
     }
 }
 
-/* OAuth刷新切换开关 */
+/* OAuth refresh toggle switch */
 .oauth-refresh-toggle {
     display: flex;
     align-items: center;
@@ -1216,7 +1216,7 @@ input:checked + .toggle-slider:before {
     font-size: 0.875rem;
 }
 
-/* 系统提示区域 */
+/* System prompt area */
 .system-prompt-section {
     margin-top: 2rem;
     padding-top: 1.5rem;
@@ -1230,7 +1230,7 @@ input:checked + .toggle-slider:before {
     font-style: italic;
 }
 
-/* 提供商类型显示 */
+/* Provider type display */
 .provider-type-text {
     font-size: 16px;
     font-weight: 600;
@@ -1246,7 +1246,7 @@ input:checked + .toggle-slider:before {
     color: var(--primary-color);
 }
 
-/* 模态框样式 */
+/* Modal styles */
 .provider-modal {
     position: fixed;
     top: 0;
@@ -1616,7 +1616,7 @@ input:checked + .toggle-slider:before {
     color: #6c757d;
 }
 
-/* 模态框中的文件上传输入框样式 */
+/* File upload input box styles in modal */
 .config-item .file-input-group {
     position: relative;
     display: flex;
@@ -1678,7 +1678,7 @@ input:checked + .toggle-slider:before {
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
-/* 无提供商提示 */
+/* No provider prompt */
 .no-providers {
     text-align: center;
     padding: 2rem;
@@ -1690,7 +1690,7 @@ input:checked + .toggle-slider:before {
     font-size: 1rem;
 }
 
-/* 无配置文件提示 */
+/* No config file prompt */
 .no-configs {
     text-align: center;
     padding: 2rem;
@@ -1702,7 +1702,7 @@ input:checked + .toggle-slider:before {
     font-size: 1rem;
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
     .main-content {
         flex-direction: column;
@@ -1754,7 +1754,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 健康状态高亮样式 */
+/* Health status highlight styles */
 .provider-item-detail.unhealthy {
     border: 2px solid var(--warning-color);
     background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%);
@@ -1828,7 +1828,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 异常状态的特殊标识 */
+/* Special indicator for abnormal status */
 .provider-item-detail.unhealthy::before {
     content: '';
     position: absolute;
@@ -1845,7 +1845,7 @@ input:checked + .toggle-slider:before {
     position: relative;
 }
 
-/* 配置管理页面样式 */
+/* Configuration management page styles */
 .upload-config-panel {
     background: var(--bg-primary);
     padding: 2rem;
@@ -2131,7 +2131,7 @@ input:checked + .toggle-slider:before {
     background: #e5e7eb;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
     .search-controls {
         grid-template-columns: 1fr;
@@ -2173,7 +2173,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 配置查看模态框样式 */
+/* Configuration view modal styles */
 .config-view-modal {
     position: fixed;
     top: 0;
@@ -2308,7 +2308,7 @@ input:checked + .toggle-slider:before {
     background: var(--bg-secondary);
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .config-modal-content {
         width: 95%;
@@ -2324,7 +2324,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 关联信息显示样式 */
+/* Association information display styles */
 .config-usage-info {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -2405,7 +2405,7 @@ input:checked + .toggle-slider:before {
     flex: 1;
 }
 
-/* 针对不同使用类型的特殊样式 */
+/* Special styles for different usage types */
 .config-item-manager.used .config-usage-info {
     border-left-color: var(--success-color);
 }
@@ -2422,7 +2422,7 @@ input:checked + .toggle-slider:before {
     background: var(--success-color);
 }
 
-/* 提供商池关联的特殊样式 */
+/* Special styles for provider pool association */
 .usage-detail-item[data-usage-type="provider_pool"] {
     background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
     border-color: #0ea5e9;
@@ -2436,7 +2436,7 @@ input:checked + .toggle-slider:before {
     background: #0ea5e9;
 }
 
-/* 主要配置关联的特殊样式 */
+/* Special styles for main configuration association */
 .usage-detail-item[data-usage-type="main_config"] {
     background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
     border-color: var(--success-color);
@@ -2450,7 +2450,7 @@ input:checked + .toggle-slider:before {
     background: var(--success-color);
 }
 
-/* 多种用途的特殊样式 */
+/* Special styles for multiple purposes */
 .usage-detail-item[data-usage-type="multiple"] {
     background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
     border-color: var(--warning-color);
@@ -2464,7 +2464,7 @@ input:checked + .toggle-slider:before {
     background: var(--warning-color);
 }
 
-/* 删除确认模态框样式 */
+/* Delete confirmation modal styles */
 .delete-confirm-modal {
     position: fixed;
     top: 0;
@@ -2778,7 +2778,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .usage-detail-item {
         flex-direction: column;
@@ -2834,7 +2834,7 @@ input:checked + .toggle-slider:before {
     }
 }
 
-/* 禁用提供商状态样式 */
+/* Disabled provider status styles */
 .provider-item-detail.disabled {
     opacity: 0.6;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
@@ -2910,7 +2910,7 @@ input:checked + .toggle-slider:before {
     transform: translateY(0);
 }
 
-/* 健康检测按钮样式 */
+/* Health check button styles */
 .btn-info {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
@@ -2925,7 +2925,7 @@ input:checked + .toggle-slider:before {
     transform: translateY(0);
 }
 
-/* 提供商状态指示器 */
+/* Provider status indicator */
 .provider-status .disabled-indicator {
     position: relative;
 }
@@ -2946,7 +2946,7 @@ input:checked + .toggle-slider:before {
     background: var(--success-color);
 }
 
-/* 禁用状态下的交互效果 */
+/* Interaction effects in disabled state */
 .provider-item-detail.disabled .provider-actions-group .btn-edit,
 .provider-item-detail.disabled .provider-actions-group .btn-delete {
     opacity: 0.5;
@@ -2957,7 +2957,7 @@ input:checked + .toggle-slider:before {
     opacity: 1;
 }
 
-/* 统计信息中的禁用状态显示 */
+/* Disabled state display in statistics */
 .provider-stat .disabled-count {
     color: #6c757d;
     font-style: italic;
@@ -2968,7 +2968,7 @@ input:checked + .toggle-slider:before {
     font-weight: 600;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .provider-item-detail.disabled {
         opacity: 0.5;
@@ -3157,7 +3157,7 @@ input:checked + .toggle-slider:before {
     line-height: 1.5;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 1024px) {
     .dashboard-top-row {
         flex-direction: column;
@@ -3223,7 +3223,7 @@ input:checked + .toggle-slider:before {
 }
 
 
-/* 不支持的模型选择器样式 */
+/* Unsupported model selector styles */
 .not-supported-models-section {
     grid-column: 1 / -1;
     margin-top: 16px;
@@ -3316,7 +3316,7 @@ input:checked + .toggle-slider:before {
     color: #dc3545;
 }
 
-/* 编辑模式下的样式 */
+/* Styles in edit mode */
 .provider-item-detail.editing .model-checkbox-label {
     cursor: pointer;
 }
@@ -3329,7 +3329,7 @@ input:checked + .toggle-slider:before {
     cursor: pointer;
 }
 
-/* 全宽配置项 */
+/* Full-width configuration items */
 .form-grid.full-width {
     grid-column: 1 / -1;
 }
@@ -3364,7 +3364,7 @@ input:checked + .toggle-slider:before {
     font-size: 0.75rem;
 }
 
-/* 授权模态框样式 */
+/* Authorization modal styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -3502,7 +3502,7 @@ input:checked + .toggle-slider:before {
     font-size: 0.875rem;
 }
 
-/* 授权信息样式 */
+/* Authorization information styles */
 .auth-info {
     display: flex;
     flex-direction: column;
@@ -3617,7 +3617,7 @@ input:checked + .toggle-slider:before {
     gap: 0.5rem;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .modal-content {
         width: 95%;
@@ -3747,7 +3747,7 @@ input:checked + .toggle-slider:before {
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
-/* 移除数字输入框的上下箭头 */
+/* Remove up/down arrows from number input */
 .page-jump-input::-webkit-outer-spin-button,
 .page-jump-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -3758,7 +3758,7 @@ input:checked + .toggle-slider:before {
     -moz-appearance: textfield;
 }
 
-/* 响应式分页 */
+/* Responsive pagination */
 @media (max-width: 768px) {
     .pagination-container {
         flex-direction: column;
@@ -3824,7 +3824,7 @@ input:checked + .toggle-slider:before {
     opacity: 0.5;
 }
 
-/* 提供商分组样式 */
+/* Provider grouping styles */
 .usage-provider-group {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -3932,7 +3932,7 @@ input:checked + .toggle-slider:before {
 .stat-error { color: var(--danger-color); }
 .stat-total { color: var(--text-secondary); }
 
-/* 实例卡片 */
+/* Instance cards */
 .usage-instance-card {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -4004,7 +4004,7 @@ input:checked + .toggle-slider:before {
     white-space: nowrap;
 }
 
-/* 用户信息整合到卡片头部 */
+/* Integrate user information into card header */
 .instance-user-info {
     display: flex;
     align-items: center;
@@ -4153,7 +4153,7 @@ input:checked + .toggle-slider:before {
     color: var(--primary-color);
 }
 
-/* 总用量样式 */
+/* Total usage styles */
 .total-usage {
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     border: 1px solid var(--primary-color);
@@ -4195,7 +4195,7 @@ input:checked + .toggle-slider:before {
     margin-top: 0.25rem;
 }
 
-/* 重置时间紧凑样式 */
+/* Compact reset time styles */
 .reset-info-compact {
     background: var(--bg-secondary);
     padding: 0.5rem 0.75rem;
@@ -4240,7 +4240,7 @@ input:checked + .toggle-slider:before {
     font-weight: 700;
 }
 
-/* 过期时间行样式 */
+/* Expiry time row styles */
 .expiration-row {
     border-top: 1px dashed var(--border-color);
     padding-top: 0.375rem;
@@ -4459,7 +4459,7 @@ input:checked + .toggle-slider:before {
     gap: 0.375rem;
 }
 
-/* 用量卡片响应式调整 */
+/* Usage card responsive adjustments */
 @media (max-width: 768px) {
     .usage-instance-header {
         padding: 0.5rem 0.75rem;
@@ -4575,7 +4575,7 @@ input:checked + .toggle-slider:before {
     flex: 1;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .language-btn {
         padding: 0.5rem 0.75rem;

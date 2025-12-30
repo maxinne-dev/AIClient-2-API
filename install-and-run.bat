@@ -2,7 +2,7 @@
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-:: 处理参数
+:: Process arguments
 set FORCE_PULL=0
 
 for %%a in (%*) do (
@@ -10,82 +10,82 @@ for %%a in (%*) do (
 )
 
 echo ========================================
-echo   AI Client 2 API 快速安装启动脚本
+echo   AI Client 2 API Quick Install and Run Script
 echo ========================================
 echo.
 
-:: 检查Git并尝试pull
+:: Check Git and try to pull
 if !FORCE_PULL! equ 1 (
-    echo [更新] 正在从远程仓库拉取最新代码...
+    echo [Update] Pulling latest code from remote repository...
     git --version >nul 2>&1
     if !errorlevel! equ 0 (
         git pull
         if !errorlevel! neq 0 (
-            echo [警告] Git pull 失败，请检查网络或手动处理冲突。
+            echo [Warning] Git pull failed, please check network or handle conflicts manually.
         ) else (
-            echo [成功] 代码已更新。
+            echo [Success] Code updated.
         )
     ) else (
-        echo [警告] 未检测到 Git，跳过代码拉取。
+        echo [Warning] Git not detected, skipping code pull.
     )
 )
 
-:: 检查Node.js是否已安装
-echo [检查] 正在检查Node.js是否已安装...
+:: Check if Node.js is installed
+echo [Check] Checking if Node.js is installed...
 node --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 未检测到Node.js，请先安装Node.js
-    echo 下载地址：https://nodejs.org/
-    echo 提示：推荐安装LTS版本
+    echo [Error] Node.js not detected, please install Node.js first
+    echo Download URL:https://nodejs.org/
+    echo Tip: LTS version recommended
     pause
     exit /b 1
 )
 
-:: 获取Node.js版本
+:: Get Node.js version
 for /f "tokens=*" %%i in ('node --version') do set NODE_VERSION=%%i
-echo [成功] Node.js已安装，版本: !NODE_VERSION!
+echo [Success] Node.js installed, version: !NODE_VERSION!
 
-:: 检查package.json是否存在
+:: Check if package.json exists
 if not exist "package.json" (
-    echo [错误] 未找到package.json文件
-    echo 请确保在项目根目录下运行此脚本
+    echo [Error] package.json file not found
+    echo Please ensure you run this script in the project root directory
     pause
     exit /b 1
 )
 
-echo [成功] 找到package.json文件
+echo [Success] Found package.json file
 
-echo [安装] 正在安装/更新依赖...
-echo 这可能需要几分钟时间，请耐心等待...
-echo 正在执行: npm install...
+echo [Install] Installing/updating dependencies...
+echo This may take a few minutes, please be patient...
+echo Executing: npm install...
 :: 使用npm install并设置超时机制
 call npm install --timeout=300000
 if !errorlevel! neq 0 (
-    echo [错误] 依赖安装失败
+    echo [Error] Dependency installation failed
     echo 请检查网络连接或手动运行 'npm install'
     pause
     exit /b 1
 )
-echo [成功] 依赖安装/更新完成
+echo [Success] Dependency installation/update completed
 
-:: 检查src目录和api-server.js是否存在
+:: Check if src directory and api-server.js exist
 if not exist "src\api-server.js" (
     echo [错误] 未找到src\api-server.js文件
     pause
     exit /b 1
 )
 
-echo [成功] 项目文件检查完成
+echo [Success] Project file check completed
 
-:: 启动应用程序
+:: Start application
 echo.
 echo ========================================
-echo   启动AI Client 2 API服务器...
+echo   Starting AI Client 2 API server...
 echo ========================================
 echo.
-echo 服务器将在 http://localhost:3000 启动
-echo 访问 http://localhost:3000 查看管理界面
-echo 按 Ctrl+C 停止服务器
+echo Server will start at http://localhost:3000
+echo Visit http://localhost:3000 to view the management interface
+echo Press Ctrl+C to stop the server
 echo.
 
 :: 启动服务器
