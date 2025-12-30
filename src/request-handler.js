@@ -53,7 +53,7 @@ export function createRequestHandler(config, providerPoolManager) {
             return;
         }
 
-        // Serve static files for UI (除了登录页面需要认证)
+        // Serve static files for UI (except login page requires authentication)
         if (path.startsWith('/static/') || path === '/' || path === '/favicon.ico' || path === '/index.html' || path.startsWith('/app/') || path === '/login.html') {
             const served = await serveStaticFiles(path, res);
             if (served) return;
@@ -84,8 +84,8 @@ export function createRequestHandler(config, providerPoolManager) {
 
         // providers health endpoint
         // url params: provider[string], customName[string], unhealthRatioThreshold[float]
-        // 支持provider, customName过滤记录 
-        // 支持unhealthRatioThreshold控制不健康比例的阈值, 当unhealthyRatio超过阈值返回summaryHealthy: false
+        // Supports filtering records by provider and customName
+        // Supports unhealthRatioThreshold to control the unhealthy ratio threshold, returns summaryHealthy: false when unhealthyRatio exceeds threshold
         if (method === 'GET' && path === '/provider_health') {
             try {
                 const provider = requestUrl.searchParams.get('provider');
@@ -140,7 +140,7 @@ export function createRequestHandler(config, providerPoolManager) {
             }
         }
 
-        // 获取或选择 API Service 实例
+        // Get or select API Service instance
         let apiService;
         try {
             apiService = await getApiService(currentConfig);
