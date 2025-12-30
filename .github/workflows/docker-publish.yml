@@ -1,11 +1,11 @@
-name: 构建并发布 Docker 镜像
+name: Build and Publish Docker Image
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'VERSION'  # 仅当 VERSION 文件变更时触发
+      - 'VERSION'  # Only trigger when VERSION file changes
 
 env:
   REGISTRY: docker.io
@@ -15,53 +15,53 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 需要写权限来创建 tag
+      contents: write  # Need write permission to create tag
       packages: write
 
     steps:
-      - name: 检出代码
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取完整历史以便创建 tag
+          fetch-depth: 0  # Get full history to create tag
 
-      - name: 读取版本号
+      - name: Read version number
         id: version
         run: |
           VERSION=$(cat VERSION | tr -d '\n\r ')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
-          echo "读取到版本号: $VERSION"
+          echo "Read version number: $VERSION"
 
-      - name: 检查 tag 是否已存在
+      - name: Check if tag already exists
         id: check_tag
         run: |
           if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Tag v${{ steps.version.outputs.version }} 已存在"
+            echo "Tag v${{ steps.version.outputs.version }} already exists"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Tag v${{ steps.version.outputs.version }} 不存在，将创建新 tag"
+            echo "Tag v${{ steps.version.outputs.version }} does not exist, will create new tag"
           fi
 
-      - name: 创建 Git Tag
+      - name: Create Git Tag
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
           git push origin "v${{ steps.version.outputs.version }}"
-          echo "已创建并推送 tag: v${{ steps.version.outputs.version }}"
+          echo "Created and pushed tag: v${{ steps.version.outputs.version }}"
 
-      - name: 设置 Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 登录到 Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 提取 Docker 元数据
+      - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -70,7 +70,7 @@ jobs:
             type=raw,value=${{ steps.version.outputs.version }}
             type=raw,value=latest
 
-      - name: 构建并推送 Docker 镜像
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -82,14 +82,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 生成构建摘要
+      - name: Generate build summary
         run: |
-          echo "## Docker 镜像构建成功 :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "## Docker Image Built Successfully :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**版本号:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**Git Tag:** ${{ steps.version.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**镜像标签:**" >> $GITHUB_STEP_SUMMARY
+          echo "**Image Tags:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
